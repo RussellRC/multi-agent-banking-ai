@@ -1,9 +1,13 @@
+{
+  "name": "manager",
+  "url": "http://localhost:8000/a2a/manager",
+  "description": "Main manager agent that delegates tasks to specialized agents.",
+  "version": "1.0.0",
   "defaultInputModes": ["text/plain"],
   "defaultOutputModes": ["text/plain"],
   "capabilities": {
     "streaming": false,
     "functions": true
   },
-  "skills": [
-  ]
+  "skills": []
 }

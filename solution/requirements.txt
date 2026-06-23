@@ -1,3 +1,6 @@
-a2a-sdk>=0.3.6
-google-adk>=1.17.0
+# Bug with ADK A2A 2.2.0 https://github.com/google/adk-python/issues/5994
+google-adk[a2a]==2.1.0
+google-cloud-discoveryengine>=0.13.11
+a2a-sdk[http-server]
 toolbox-core>=0.5.0
+python-dotenv

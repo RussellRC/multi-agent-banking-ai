@@ -1,6 +1,8 @@
 import os
 from google.adk.agents import Agent
 from google.adk.sessions import InMemorySessionService
+from google.genai import types
+from toolbox_core import ToolboxSyncClient
 
 # Configure short-term session to use the in-memory service
 session_service = InMemorySessionService()
@@ -13,8 +15,12 @@ with open(instruction_file_path, "r") as f:
   instruction = f.read()
 
 # Set up the tools that we will be using for the root agent
+toolbox_url = os.environ.get("TOOLBOX_URL", "http://127.0.0.1:5000")
+print(f"Connecting to Toolbox at {toolbox_url}")
+db_client = ToolboxSyncClient( toolbox_url )
+
 tools=[
-  # TODO: Add tools
+  db_client.load_tool("get_loan"),
 ]
 
 sub_agents = [
@@ -26,4 +32,15 @@ sub_agents = [
 model = "gemini-2.5-flash"
 
 # Create our agent
-root_agent = # TODO: Create root agent
+root_agent = Agent(
+  name="loan_agent",
+  description="An agent that helps with everything about loans.",
+  instruction=instruction,
+  model=model,
+  tools=tools,
+  generate_content_config=types.GenerateContentConfig(
+    http_options=types.HttpOptions(
+      retry_options=types.HttpRetryOptions(initial_delay=1, attempts=3),
+    )
+  )
+)

@@ -19,20 +19,8 @@ tools=[
 ]
 
 # Set up other agents that we can delegate to
-deposit_agent = RemoteA2aAgent(
-  name="deposit_agent",
-  agent_card=f"http://localhost:8000/a2a/deposit{AGENT_CARD_WELL_KNOWN_PATH}"
-)
-
-loan_agent = RemoteA2aAgent(
-  name="loan_agent",
-  agent_card=f"http://localhost:8000/a2a/loan{AGENT_CARD_WELL_KNOWN_PATH}"
-)
-
-
 sub_agents=[
-  deposit_agent,
-  loan_agent
+  # TODO: Add sub-agents
 ]
 
 # Use the Gemini 2.5 Flash model since it performs quickly
@@ -40,11 +28,4 @@ sub_agents=[
 model = "gemini-2.5-flash"
 
 # Create our agent
-root_agent = Agent(
-  name="manager_agent",
-  description="Main agent orchestrator.",
-  model=model,
-  instruction=instruction,
-  tools=tools,
-  sub_agents=sub_agents,
-)
+root_agent = # TODO: Implement root agent

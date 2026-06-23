@@ -1,4 +1,8 @@
 {
+  "name": "loan",
+  "url": "http://localhost:8000/a2a/loan",
+  "description": "Agent that answers questions about loans",
+  "version": "1.0.0",
   "defaultInputModes": ["text/plain"],
   "defaultOutputModes": ["text/plain"],
   "capabilities": {
@@ -6,5 +10,15 @@
     "functions": true
   },
   "skills": [
+    {
+      "id": "get_loan",
+      "name": "Get Loan",
+      "description": " Get the data about a loan of the customer",
+      "tags": ["Loan"],
+      "examples": [
+        "What's the outstanding balance of my personal loan?",
+        "What's the monthly payment and next payment date of my auto loan?"
+      ]
+    }
   ]
 }

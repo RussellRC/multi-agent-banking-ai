@@ -1,4 +1,8 @@
 {
+  "name": "deposit",
+  "url": "http://localhost:8000/a2a/deposit",
+  "description": "Agent that answers questions about deposit accounts",
+  "version": "1.0.0",
   "defaultInputModes": ["text/plain"],
   "defaultOutputModes": ["text/plain"],
   "capabilities": {
@@ -6,5 +10,15 @@
     "functions": true
   },
   "skills": [
+    {
+      "id": "get_balance",
+      "name": "Get Balance",
+      "description": " Get the balance of an account",
+      "tags": ["Deposit", "Account", "Balance"],
+      "examples": [
+        "Give me the balance of my vacation account",
+        "What's the current balance of my primary account?"
+      ]
+    }
   ]
 }

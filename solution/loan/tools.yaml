@@ -1,11 +1,21 @@
 sources:
   loan:
-    kind: mysql
-    host: ${MYSQL_HOST}
-    port: ${MYSQL_PORT:3306}
-    database: bank
-    user: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    type: cloud-sql-mysql
+    project: ${CLOUD_SQL_MYSQL_PROJECT}
+    region: ${CLOUD_SQL_MYSQL_REGION}
+    instance: ${CLOUD_SQL_MYSQL_INSTANCE}
+    database: ${CLOUD_SQL_MYSQL_DATABASE}
+    user: ${CLOUD_SQL_MYSQL_USER}
+    password: ${CLOUD_SQL_MYSQL_PASSWORD}
 
 tools:
-  # TODO
+  get_loan:
+    kind: mysql-sql
+    source: loan
+    description: Get the data about the loan of the customer
+    parameters:
+      - name: loan_type
+        type: string
+        description: The type of the loan, e.g., auto, personal
+    statement:
+      select * from loans where customer_id = 1 and loan_type = ?;

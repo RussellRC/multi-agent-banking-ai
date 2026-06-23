@@ -102,7 +102,7 @@ source .venv/bin/activate
 
 3\. Run the application using the Google Agent Development Kit (ADK)
 ```shell
-adk web
+adk web --a2a solution
 ```
 This boots up a local development UI, typically accessible in your browser at http://localhost:8000
 

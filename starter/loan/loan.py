@@ -29,7 +29,6 @@ class TotalValueAgent(BaseAgent):
 
   async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
     # TODO: Implement
-    pass
 
 # TODO: Instantiate the TotalValueAgent to use (stage 4)
 
