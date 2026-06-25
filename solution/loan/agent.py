@@ -1,5 +1,5 @@
 import os
-from google.adk.agents import Agent
+from google.adk.agents import Agent, LlmAgent
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
 from toolbox_core import ToolboxSyncClient

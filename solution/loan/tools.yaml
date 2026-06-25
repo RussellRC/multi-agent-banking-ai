@@ -18,4 +18,15 @@ tools:
         type: string
         description: The type of the loan, e.g., auto, personal
     statement:
-      select * from loans where customer_id = 1 and loan_type = ?;
+      select loan_type, origination_date, amount, outstanding_balance, terms, monthly_payment, next_payment_date
+      from loans
+      where customer_id = 1 and loan_type = ?;
+
+  get_total_outstanding_balance:
+    kind: mysql-sql
+    source: loan
+    description: Get the total outstanding balance on all of the customer's loans
+    statement:
+      select sum(outstanding_balance)
+      from loans
+      where customer_id = 1;

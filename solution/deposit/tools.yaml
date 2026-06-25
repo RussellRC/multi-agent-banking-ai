@@ -29,7 +29,18 @@ tools:
         type: string
         description: The type of the account
     statement:
-      select *
+      select transaction_date, amount, description
       from transactions
       where
       account_id = (select id from accounts where customer_id = 1 and account_type = ?);
+
+  check_minimum_balance:
+    kind: mysql-sql
+    source: deposit
+    description: Returns true if the sum of all deposit account balances is greater than the provided value, otherwise false.
+    parameters:
+      - name: min_value
+        type: float
+        description: The threshold value to compare the total balance against.
+    statement:
+      select (select sum(balance) from accounts where customer_id = 1) > ?;
