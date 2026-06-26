@@ -371,7 +371,8 @@ class LoanApprovalAgent(BaseAgent):
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
         ctx.reset_sub_agent_states(self.name)
 
-        has_processing_errors = False # Track our error state
+        has_processing_errors = False
+        validation_errors = [] # Specifically track missing data messages
 
         # 1. Run total_value_agent and user_profile_agent in parallel
         async for event in self.parallel_agent.run_async(ctx):
@@ -389,7 +390,6 @@ class LoanApprovalAgent(BaseAgent):
                             logging.error(f"UserProfile errors: {output.errors}")
                             has_processing_errors = True
                     except Exception as e:
-                        logging.error(f"Error parsing UserProfileOutput: {e}")
                         has_processing_errors = True
 
                 # Check Total Value Agent
@@ -400,14 +400,31 @@ class LoanApprovalAgent(BaseAgent):
                         ctx.session.state["policy_found"] = output.policy_found
                         if output.errors:
                             logging.error(f"TotalValue errors: {output.errors}")
+                            validation_errors.extend(output.errors) # Capture the specific messages
                             has_processing_errors = True
                     except Exception as e:
-                        logging.error(f"Error parsing TotalValueOutput: {e}")
                         has_processing_errors = True
 
-        is_equity_sufficient = False
+        # Early conversational exit
+        # If the get_requested_value_agent reported missing info (e.g., "Missing loan amount"),
+        # we ask the user for it and halt this approval attempt.
+        if validation_errors:
+            error_details = " ".join(validation_errors)
+            clarification_msg = (
+                f"I need a bit more information before I can process your loan application: {error_details}. "
+                "Could you please clarify?"
+            )
+            yield Event(
+                invocation_id=ctx.invocation_id,
+                author=self.name,
+                branch=ctx.branch,
+                content=types.Content(parts=[types.Part(text=clarification_msg)])
+            )
+            return  # EXIT THE GENERATOR ENTIRELY! Do not run the equity check or approval report.
 
-        # 2. Only run check_equity_agent if previous steps succeeded
+
+        # 2. Only run check_equity_agent if previous steps succeeded completely
+        is_equity_sufficient = False
         if not has_processing_errors:
             minimum_deposit_balance = ctx.session.state.get("minimum_deposit_balance", 0.0)
 

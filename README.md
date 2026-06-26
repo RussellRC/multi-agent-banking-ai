@@ -106,6 +106,13 @@ adk web --a2a solution
 ```
 This boots up a local development UI, typically accessible in your browser at http://localhost:8000
 
+## Debugging the application
+```shell
+python -m debugpy --listen 5678 --wait-for-client -m google.adk.cli web --no-reload --log_level debug --a2a solution
+```
+
+Then connect a remote debugger on `localhost:5678`
+
 ## Built With
 * **Python**: Programming Language
 * **Google ADK**: Agent Development Kit
