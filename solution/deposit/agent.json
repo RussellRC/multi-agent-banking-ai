@@ -23,7 +23,7 @@
     {
       "id": "check_minimum_balance",
       "name": "Check Minimum Balance",
-      "description": "Returns whether the sum of all deposit account balances is greater than the provided value, otherwise false.",
+      "description": "Returns 1 if the sum of all deposit account balances is greater than the provided value, otherwise 0.",
       "tags": ["Deposit", "Account", "Balance"],
       "examples": [
         "Is the total balance greater than $5000?"

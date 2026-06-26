@@ -37,10 +37,12 @@ tools:
   check_minimum_balance:
     kind: mysql-sql
     source: deposit
-    description: Returns true if the sum of all deposit account balances is greater than the provided value, otherwise false.
+    description: Returns 1 if the sum of all deposit account balances is greater than the provided value, otherwise 0.
     parameters:
       - name: min_value
-        type: float
+        type: string # NOTE: Using `float` makes the app fail with error: Fail to load 'deposit.agent' module. Unsupported schema type: number
         description: The threshold value to compare the total balance against.
     statement:
-      select (select sum(balance) from accounts where customer_id = 1) > ?;
+      SELECT CAST(SUM(balance) > ? AS UNSIGNED) AS is_greater
+      FROM accounts
+      WHERE customer_id = 1;
