@@ -1,0 +1,48 @@
+sources:
+  deposit:
+    type: cloud-sql-mysql
+    project: ${CLOUD_SQL_MYSQL_PROJECT}
+    region: ${CLOUD_SQL_MYSQL_REGION}
+    instance: ${CLOUD_SQL_MYSQL_INSTANCE}
+    database: ${CLOUD_SQL_MYSQL_DATABASE}
+    user: ${CLOUD_SQL_MYSQL_USER}
+    password: ${CLOUD_SQL_MYSQL_PASSWORD}
+
+tools:
+  get_balance:
+    kind: mysql-sql
+    source: deposit
+    description: Get the balance of an account
+    parameters:
+      - name: account_type
+        type: string
+        description: The type of the account, e.g., vacation, primary
+    statement:
+      select balance from accounts where customer_id = 1 and account_type = ?;
+
+  get_account_transactions:
+    kind: mysql-sql
+    source: deposit
+    description: Get the all the transactions of an account
+    parameters:
+      - name: account_type
+        type: string
+        description: The type of the account
+    statement:
+      select transaction_date, amount, description
+      from transactions
+      where
+      account_id = (select id from accounts where customer_id = 1 and account_type = ?);
+
+  check_minimum_balance:
+    kind: mysql-sql
+    source: deposit
+    description: Returns 1 if the sum of all deposit account balances is greater than the provided value, otherwise 0.
+    parameters:
+      - name: min_value
+        type: string # NOTE: Using `float` makes the app fail with error: Fail to load 'deposit.agent' module. Unsupported schema type: number
+        description: The threshold value to compare the total balance against.
+    statement:
+      SELECT CAST(SUM(balance) > ? AS UNSIGNED) AS is_greater
+      FROM accounts
+      WHERE customer_id = 1;

@@ -1,0 +1,8 @@
+# Bug with ADK A2A 2.2.0 https://github.com/google/adk-python/issues/5994
+google-adk[a2a]==2.1.0
+google-genai
+google-cloud-discoveryengine>=0.13.11
+a2a-sdk[http-server]
+toolbox-core>=1.1.0
+python-dotenv
+debugpy==1.8.21

@@ -1,0 +1,32 @@
+sources:
+  loan:
+    type: cloud-sql-mysql
+    project: ${CLOUD_SQL_MYSQL_PROJECT}
+    region: ${CLOUD_SQL_MYSQL_REGION}
+    instance: ${CLOUD_SQL_MYSQL_INSTANCE}
+    database: ${CLOUD_SQL_MYSQL_DATABASE}
+    user: ${CLOUD_SQL_MYSQL_USER}
+    password: ${CLOUD_SQL_MYSQL_PASSWORD}
+
+tools:
+  get_loan:
+    kind: mysql-sql
+    source: loan
+    description: Get the data about the loan of the customer
+    parameters:
+      - name: loan_type
+        type: string
+        description: The type of the loan, e.g., auto, personal
+    statement:
+      select loan_type, origination_date, amount, outstanding_balance, terms, monthly_payment, next_payment_date
+      from loans
+      where customer_id = 1 and loan_type = ?;
+
+  get_total_outstanding_balance:
+    kind: mysql-sql
+    source: loan
+    description: Get the total outstanding balance on all of the customer's loans
+    statement:
+      select sum(outstanding_balance)
+      from loans
+      where customer_id = 1;
