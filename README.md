@@ -82,10 +82,14 @@ CLOUD_SQL_MYSQL_PASSWORD: your-cloud-sql-password
 The project is organized into the following key directories and files:
 
 * **`starter/`**: Contains the original, **untouched** starter template code.
-
-* **`solution/`**: Houses the developed solution
-
+* **`solution/`**: Houses the developed solution, keeping the requested structure (`deposit`, `loan`, `manager`), as well as:
+  * `DIAGRAM.md`: Flow-chart diagram of the agent architecture
+  * `REPORT.md`: Comprehensive explanation of the multi-agent system and evaluation report based on test results 
 * **`evidence/`**: Stores evidence of successful application executions and test runs.
+* **`tests/`**: Stores my own lightweight benchmark tests
+* **`testing/`**: Contains:
+  * The provided script `bin/a2a.py`
+  * Provided test scenarios in the `test_scenarios.csv` file
 
 
 ## Running the application

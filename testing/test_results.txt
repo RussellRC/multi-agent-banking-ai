@@ -1,0 +1,213 @@
+
+========================================
+Thread ID: thread-001
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ What is my current balance on the vacation account?
+
+Response:
+ The current balance for your vacation account is $1500.00.
+
+
+========================================
+Thread ID: thread-002
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ What is my current balance?
+
+Response:
+ Could you please specify which account's balance you'd like to know (e.g., primary, vacation)?
+
+-----
+
+Prompt:
+ My primary account
+
+Response:
+ The current balance for your primary account is $5230.50.
+
+
+========================================
+Thread ID: thread-003
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ How much do I have on deposit?
+
+Response:
+ I can help you with that. Which account balance would you like to know? (e.g., primary, vacation, etc.)
+
+
+========================================
+Thread ID: thread-004
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ What was my most recent payment on my main account?
+
+Response:
+ The most recent payment on your main account was for an amount of $15.25 for Coffee on 2025-09-13.
+
+
+========================================
+Thread ID: thread-005
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ How much did I pay the hotel on vacation?
+
+Response:
+ I can only provide you with the transactions for your vacation account. You can then review them to find the hotel payment. Would you like me to get the transactions for your vacation account?
+
+
+========================================
+Thread ID: thread-006
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ Add $1000 to my vacation account.
+
+Response:
+ My role is limited to providing information about account balances and transactions. I cannot directly add funds to your account.
+
+
+========================================
+Thread ID: thread-007
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ Can I get $100 for bubble gum?
+
+Response:
+ I can only help with banking inquiries related to your accounts, transactions, or loans. I cannot provide money for personal expenses.
+
+-----
+
+Prompt:
+ In that case, can I get $10000?
+
+Response:
+ As a bank representative, I can assist with inquiries about banking services, accounts, transactions, or existing loans. However, I cannot directly provide funds or approve loan applications myself. My role is to connect you with the appropriate specialist.
+
+
+========================================
+Thread ID: thread-008
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ I'd like to get a $700 loan
+
+Response:
+ Thank you for your loan application. After careful consideration, we are unable to approve your application at this time. We wish you the best.
+
+-----
+
+Prompt:
+ I want to buy an off-road 4x4 and my buddy can get a good deal on one.
+
+Response:
+ I understand you're looking to buy an off-road 4x4, but my expertise is limited to banking inquiries such as account balances, transactions, and loans. I'm unable to assist with vehicle purchases.
+
+
+========================================
+Thread ID: thread-009
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ I'm looking to buy a new house for about $500,000
+
+Response:
+ I understand you're looking to buy a new house for about $500,000, and this involves a new loan request. My role is to connect you with the appropriate specialist for such inquiries. However, I am currently unable to route your request to our loan agent. For assistance with a new home loan, I recommend contacting our bank directly.
+
+
+========================================
+Thread ID: thread-010
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ Hey, I think I can get a good deal on a car for $10,000. Can I borrow that much?
+
+Response:
+ That's wonderful news! Your loan application for $10,000 has been approved. A loan officer will be in touch with you very soon to go over all the final details and help you complete the process. Congratulations on your new car!
+
+
+========================================
+Thread ID: thread-011
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ When is my next auto payment due?
+
+Response:
+ Your next auto payment is due on 2025-10-01.
+
+
+========================================
+Thread ID: thread-012
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ How much do I still owe on my personal loan?
+
+Response:
+ You currently owe $10,159.25 on your personal loan.
+
+Here are the details of your loan:
+*   **Loan Type**: Personal
+*   **Origination Date**: 2024-05-20
+*   **Original Amount**: $15,000.00
+*   **Outstanding Balance**: $10,159.25
+*   **Terms**: 48 months
+*   **Monthly Payment**: $359.19
+*   **Next Payment Date**: 2025-10-15
+
+
+========================================
+Thread ID: thread-013
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ Do I have any outstanding loans?
+
+Response:
+ I can help you with that! To check for outstanding loans, I need to know the specific type of loan you're asking about (e.g., auto loan, personal loan, mortgage). Could you please clarify what type of loan you'd like to check?
+
+
+========================================
+Thread ID: thread-014
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ Give me a summary of my financial situation.
+
+Response:
+ I can certainly help you with that, but I'll need a bit more information to know which specialist to connect you with. Are you looking for details about your account balances, recent transactions, or information regarding any loans you might have with us?
+
+
+========================================
+Thread ID: thread-015
+URL: http://localhost:8000/a2a/manager
+========================================
+
+Prompt:
+ What is the total balance across all my accounts and what loans do I have?
+
+Response:
+ I understand you're interested in both your total account balance and the loans you currently have. These are handled by two different specialized agents. To make sure I connect you with the right expert, could you please let me know whether you'd like to address your account balances or your loans first?
+

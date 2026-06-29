@@ -390,6 +390,7 @@ class LoanApprovalAgent(BaseAgent):
                             logging.error(f"UserProfile errors: {output.errors}")
                             has_processing_errors = True
                     except Exception as e:
+                        logging.error(f"Error parsing UserProfileOutput: {str(e)}")
                         has_processing_errors = True
 
                 # Check Total Value Agent
@@ -403,6 +404,7 @@ class LoanApprovalAgent(BaseAgent):
                             validation_errors.extend(output.errors) # Capture the specific messages
                             has_processing_errors = True
                     except Exception as e:
+                        logging.error(f"Error parsing TotalValueOutput: {str(e)}")
                         has_processing_errors = True
 
         # Early conversational exit
