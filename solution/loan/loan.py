@@ -122,9 +122,10 @@ class TotalValueOutput(BaseModel):
     loan_type: str = Field(description="The type of loan that the customer is asking for.", default="")
     total_outstanding_balance: float = Field(
         description="The total outstanding balance on all of the customer's loans.", default=0.0)
-    debt_to_equity_ratio: float = Field(description="The debt-to-equity ratio of the loan policy", default=0.0)
+    debt_to_equity_ratio: float = Field(description="The debt-to-equity ratio of the loan policy.", default=0.0)
     minimum_deposit_balance: float = Field(
-        description="The minimum deposit account balance needed to support the loan request.", default=0.0)
+        description="The minimum total deposit balance that the customer needs to qualify for the loan.",
+        default=0.0)
     policy_found: bool = Field(description="Whether or not a policy was found for the given loan type and amount.",
                                default=False)
     errors: List[str] = Field(description="List of errors that occurred.", default_factory=list)
@@ -156,6 +157,8 @@ class TotalValueAgent(BaseAgent):
         )
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        ctx.reset_sub_agent_states(self.name)
+
         loan_amount = 0.0
         loan_type = ""
         errors = []
@@ -191,7 +194,7 @@ class TotalValueAgent(BaseAgent):
                     try:
                         text = event.content.parts[0].text
                         output = OutstandingBalanceOutput.model_validate_json(text)
-                        total_outstanding_balance = output.total_outstanding_balance
+                        total_outstanding_balance = round(output.total_outstanding_balance, 2)
                     except Exception as e:
                         logging.error(f"Error parsing OutstandingBalanceOutput: {e}")
                         errors.append(f"Error parsing outstanding loan balance: {e}")
@@ -226,6 +229,7 @@ class TotalValueAgent(BaseAgent):
             # Calculate minimum deposit balance
             if policy_found and debt_to_equity_ratio > 0:
                 minimum_deposit_balance = (total_outstanding_balance + loan_amount) / debt_to_equity_ratio
+                minimum_deposit_balance = round(minimum_deposit_balance, 2)
             else:
                 if not policy_found:
                     errors.append("No policy was found to determine the debt-to-equity ratio.")
@@ -269,11 +273,29 @@ total_value_agent = TotalValueAgent(
 
 # --- check_equity_agent ---
 
-check_equity_agent = RemoteA2aAgent(
-    name="check_equity_agent",
+remote_deposit_agent = RemoteA2aAgent(
+    name="deposit_agent",
+    description="Agent that communicates with the Deposit agent remotely.",
     agent_card=f"http://localhost:8000/a2a/deposit{AGENT_CARD_WELL_KNOWN_PATH}"
 )
 
+class CheckEquityInput(BaseModel):
+    minimum_deposit_balance: float = Field(
+        description="The minimum total deposit balance that the customer needs to qualify for the loan.")
+
+class CheckEquityOutput(BaseModel):
+    is_balance_sufficient: bool = Field(description="Whether the customer has sufficient equity to qualify for the loan.", default=False)
+
+check_equity_agent = Agent(
+    name="check_equity_agent",
+    description="Checks if the customer has sufficient equity to qualify for the loan.",
+    model=model,
+    instruction=load_instructions("check-equity-prompt.txt"),
+    sub_agents=[remote_deposit_agent],
+    input_schema=CheckEquityInput,
+    output_schema=CheckEquityOutput,
+    generate_content_config=generate_content_config
+)
 
 # --- user_profile_agent ---
 
@@ -306,6 +328,16 @@ user_profile_agent = LlmAgent(
 
 # Helper to check if rating is sufficient
 def is_rating_sufficient(customer_rating: str | None, minimum_customer_rating: str | None) -> bool:
+    """
+    Returns whether the current customer rating is sufficient to qualify for the loan
+    by comparing it to the minimum required rating.
+
+    Args:
+        customer_rating (str): The current customer rating, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.
+        minimum_customer_rating (str): The minimum required rating, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.
+
+    Returns (bool): True if the customer rating is sufficient, False otherwise.
+    """
     if not customer_rating or not minimum_customer_rating:
         return False
     rating_rank = {
@@ -325,12 +357,18 @@ def is_rating_sufficient(customer_rating: str | None, minimum_customer_rating: s
 
 
 # --- approval_report_agent ---
+class ApprovalDecisionInput(BaseModel):
+    minimum_customer_rating: str = Field(description="The minimum customer rating that the customer needs to qualify for a loan as per the loan policy, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.")
+    customer_rating: str = Field(description="The current rating of the customer determined by its profile summary from a loan officer, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.")
+    is_balance_sufficient: bool = Field(description="Whether the customer has sufficient equity to qualify for the loan.")
+
 approval_report_agent = LlmAgent(
     name="approval_report_agent",
     description="Generates the final friendly approval or rejection message for the customer.",
     model=model,
     instruction=load_instructions("approval-report-prompt.txt"),
-    tools=[],
+    tools=[is_rating_sufficient],
+    input_schema=ApprovalDecisionInput,
     generate_content_config=generate_content_config,
 )
 
