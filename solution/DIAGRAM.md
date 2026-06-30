@@ -47,7 +47,10 @@ graph TD
     %% Specific Logic Links
     TotalValueAgent -->|Calculates requirement| LoanApprovalAgent
     UserProfileAgent -->|Validates rating| LoanApprovalAgent
-    LoanApprovalAgent -->|Cash balance verification via A2A| DepositAgent
+    LoanApprovalAgent -->|Checks for balance eligibility| CheckEquityAgent
+    CheckEquityAgent -->|Cash balance verification via A2A| DepositAgent
+    LoanApprovalAgent -->|Generates loan decision report| ApprovalReportAgent
+    ApprovalReportAgent -->|Sends to user| SystemOutput([System Response])
 
     style ManagerAgent fill:#f9f,stroke:#333,stroke-width:2px
     style LoanAgent fill:#bbf,stroke:#333,stroke-width:2px
