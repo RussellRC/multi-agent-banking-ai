@@ -93,10 +93,11 @@ The project is organized into the following key directories and files:
 
 
 ## Running the application
-1\. In a separate terminal window, run the mcp toolbox from within the `project/solution/` directory.
+1\. In a separate terminal window, run the mcp toolbox from within the root project directory.
 This will initialize the mcp-toolbox server with the default options using the `tools.yaml` as config file. 
 ```shell
-toolbox
+source .venv/bin/activate
+toolbox --configs solution/deposit/tools.yaml,solution/loan/tools.yaml
 ```
 
 2\. From the root project directory, activate the environment with `venv`
@@ -116,6 +117,14 @@ python -m debugpy --listen 5678 --wait-for-client -m google.adk.cli web --no-rel
 ```
 
 Then connect a remote debugger on `localhost:5678`
+
+
+## Testing with given scenarios
+```shell
+source .venv/bin/activate
+cd testing
+python ./bin/a2a.py --in test_scenarios.csv --out test_results
+```
 
 ## Built With
 * **Python**: Programming Language

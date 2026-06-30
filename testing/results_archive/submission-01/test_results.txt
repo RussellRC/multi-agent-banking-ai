@@ -20,7 +20,7 @@ Prompt:
  What is my current balance?
 
 Response:
- The current balance for your primary account is $5230.50.
+ Could you please specify which account's balance you'd like to know (e.g., primary, vacation)?
 
 -----
 
@@ -28,7 +28,7 @@ Prompt:
  My primary account
 
 Response:
- Are you trying to find out the balance or transactions for your primary account?
+ The current balance for your primary account is $5230.50.
 
 
 ========================================
@@ -40,7 +40,7 @@ Prompt:
  How much do I have on deposit?
 
 Response:
- I can help you with that. Please specify which account type you would like to know the balance for (e.g., primary, vacation).
+ I can help you with that. Which account balance would you like to know? (e.g., primary, vacation, etc.)
 
 
 ========================================
@@ -64,9 +64,7 @@ Prompt:
  How much did I pay the hotel on vacation?
 
 Response:
- I understand you're looking for a specific payment. However, I cannot process or filter transactions to identify payments made to a specific vendor like a hotel. My capabilities are limited to retrieving your account balance, listing all transactions for a given account type, or checking if your total balance exceeds a certain value.
-
-Would you like me to retrieve all the transactions for your 'vacation' account so you can review them yourself?
+ I can only provide you with the transactions for your vacation account. You can then review them to find the hotel payment. Would you like me to get the transactions for your vacation account?
 
 
 ========================================
@@ -78,7 +76,7 @@ Prompt:
  Add $1000 to my vacation account.
 
 Response:
- I understand you would like to add $1000 to your vacation account. As I mentioned before, I am designed to assist with general banking inquiries and to route questions about account balances, transaction history, or loan information. I am unable to directly process financial transactions like adding funds to an account.
+ My role is limited to providing information about account balances and transactions. I cannot directly add funds to your account.
 
 
 ========================================
@@ -118,7 +116,7 @@ Prompt:
  I want to buy an off-road 4x4 and my buddy can get a good deal on one.
 
 Response:
- I understand you're interested in buying an off-road 4x4. My apologies, but I can only assist with banking inquiries such as account balances, transactions, and loans. I'm unable to help with personal purchases.
+ I understand you're looking to buy an off-road 4x4, but my expertise is limited to banking inquiries such as account balances, transactions, and loans. I'm unable to assist with vehicle purchases.
 
 
 ========================================
@@ -130,7 +128,7 @@ Prompt:
  I'm looking to buy a new house for about $500,000
 
 Response:
- I understand you're still looking to buy a new house for about $500,000. Regarding your recent loan application, it appears we were unable to approve it at this time. How would you like to proceed with your home financing plans?
+ I understand you're looking to buy a new house for about $500,000, and this involves a new loan request. My role is to connect you with the appropriate specialist for such inquiries. However, I am currently unable to route your request to our loan agent. For assistance with a new home loan, I recommend contacting our bank directly.
 
 
 ========================================
@@ -168,6 +166,15 @@ Prompt:
 Response:
  You currently owe $10,159.25 on your personal loan.
 
+Here are the details of your loan:
+*   **Loan Type**: Personal
+*   **Origination Date**: 2024-05-20
+*   **Original Amount**: $15,000.00
+*   **Outstanding Balance**: $10,159.25
+*   **Terms**: 48 months
+*   **Monthly Payment**: $359.19
+*   **Next Payment Date**: 2025-10-15
+
 
 ========================================
 Thread ID: thread-013
@@ -178,7 +185,7 @@ Prompt:
  Do I have any outstanding loans?
 
 Response:
- I can help you check for outstanding loans. To do so, I need to know the specific type of loan you're inquiring about. Could you please tell me if you're asking about an auto loan, a personal loan, or another type of loan?
+ I can help you with that! To check for outstanding loans, I need to know the specific type of loan you're asking about (e.g., auto loan, personal loan, mortgage). Could you please clarify what type of loan you'd like to check?
 
 
 ========================================
@@ -190,7 +197,7 @@ Prompt:
  Give me a summary of my financial situation.
 
 Response:
- I understand you're looking for a summary of your financial situation. To assist you further, could you please tell me if you are interested in a summary of your account balances, your recent transactions, or information regarding any loans you may have? Specifying which one will allow me to get you the right information.
+ I can certainly help you with that, but I'll need a bit more information to know which specialist to connect you with. Are you looking for details about your account balances, recent transactions, or information regarding any loans you might have with us?
 
 
 ========================================
@@ -202,4 +209,5 @@ Prompt:
  What is the total balance across all my accounts and what loans do I have?
 
 Response:
- To assist you with your loans, could you please specify the type of loan you're interested in (e.g., auto, personal)?
+ I understand you're interested in both your total account balance and the loans you currently have. These are handled by two different specialized agents. To make sure I connect you with the right expert, could you please let me know whether you'd like to address your account balances or your loans first?
+
