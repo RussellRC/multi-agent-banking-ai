@@ -26,7 +26,8 @@ db_client = ToolboxSyncClient( toolbox_url )
 tools=[
   db_client.load_tool("get_balance"),
   db_client.load_tool("get_account_transactions"),
-  db_client.load_tool("check_minimum_balance")
+  db_client.load_tool("check_minimum_balance"),
+  db_client.load_tool("list_accounts"),
 ]
 
 # Use the Gemini 2.5 Flash model since it performs quickly
@@ -42,7 +43,7 @@ root_agent = Agent(
   tools=tools,
   generate_content_config=types.GenerateContentConfig(
     http_options=types.HttpOptions(
-      retry_options=types.HttpRetryOptions(initial_delay=1, attempts=3),
+      retry_options=types.HttpRetryOptions(initial_delay=1, attempts=5),
     )
   )
 )

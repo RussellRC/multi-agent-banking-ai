@@ -9,5 +9,13 @@
     "streaming": false,
     "functions": true
   },
-  "skills": []
+  "skills": [
+    {
+      "id": "route_banking_inquiry",
+      "name": "Route Banking Inquiry",
+      "description": "Routes customer banking questions to the appropriate specialized deposit or loan agent, or answers general banking questions directly.",
+      "tags": ["Routing", "Banking"],
+      "examples": ["What is my account balance?", "I'd like to apply for a loan."]
+    }
+  ]
 }

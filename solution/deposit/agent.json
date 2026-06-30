@@ -11,22 +11,13 @@
   },
   "skills": [
     {
-      "id": "get_balance",
-      "name": "Get Balance",
-      "description": "Get the balance of an account",
-      "tags": ["Deposit", "Account", "Balance"],
-      "examples": [
-        "Give me the balance of my vacation account",
-        "What's the current balance of my primary account?"
-      ]
-    },
-    {
       "id": "check_minimum_balance",
       "name": "Check Minimum Balance",
-      "description": "Returns 1 if the sum of all deposit account balances is greater than the provided value, otherwise 0.",
+      "description": "Returns whether the sum of all deposit account balances of the customer is greater than the provided value.",
       "tags": ["Deposit", "Account", "Balance"],
       "examples": [
-        "Is the total balance greater than $5000?"
+        "Is the total balance greater than $5000?",
+        "Does the total deposit balance exceed $100?"
       ]
     }
   ]

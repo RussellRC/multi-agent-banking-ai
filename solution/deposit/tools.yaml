@@ -46,3 +46,12 @@ tools:
       SELECT CAST(SUM(balance) > ? AS UNSIGNED) AS is_greater
       FROM accounts
       WHERE customer_id = 1;
+
+  list_accounts:
+    kind: mysql-sql
+    source: deposit
+    description: Returns the list of all accounts for a customer and their respective balances.
+    statement:
+      SELECT account_type, balance
+      FROM accounts
+      WHERE customer_id = 1;
