@@ -20,7 +20,7 @@ Prompt:
  What is my current balance?
 
 Response:
- Could you please specify which account's balance you'd like to know (e.g., primary, savings, vacation)?
+ To help you with that, could you please specify which account balance you would like to know (e.g., primary, vacation, savings)?
 
 -----
 
@@ -40,7 +40,7 @@ Prompt:
  How much do I have on deposit?
 
 Response:
- I can help you with that, but I need to know which account you're asking about. Do you want to know the balance for your primary, savings, or another type of account?
+ Please specify which account type you would like to know the balance for (e.g., 'primary', 'vacation').
 
 
 ========================================
@@ -52,13 +52,7 @@ Prompt:
  What was my most recent payment on my main account?
 
 Response:
- Here are your most recent transactions for your primary account:
-
-*   **Date:** 2025-09-13, **Amount:** -$15.25, **Description:** Coffee
-*   **Date:** 2025-09-12, **Amount:** -$80.00, **Description:** Groceries
-*   **Date:** 2025-09-11, **Amount:** -$120.00, **Description:** Gas
-
-Your most recent payment was for $15.25 for Coffee on 2025-09-13.
+ Your most recent payment on your primary account was for $15.25 on 2025-09-13, described as "Coffee".
 
 
 ========================================
@@ -70,7 +64,7 @@ Prompt:
  How much did I pay the hotel on vacation?
 
 Response:
- You paid $200.00 to the hotel on your vacation.
+ Could you please specify which account type (e.g., 'primary', 'vacation') you are referring to?
 
 
 ========================================
@@ -82,7 +76,7 @@ Prompt:
  Add $1000 to my vacation account.
 
 Response:
- I can only provide information about your account balance and transactions. I cannot directly add funds to your account.
+ I cannot directly add funds to your account. My capabilities are limited to providing information about your account balance and transactions, and checking if your total deposit balance meets specific minimum requirements.
 
 
 ========================================
@@ -94,7 +88,7 @@ Prompt:
  Can I get $100 for bubble gum?
 
 Response:
- Fantastic news! Your loan application has been approved. A loan officer will be in touch with you shortly to help finalize all the details.
+ I can only assist with loan-related inquiries. I cannot process requests for general amounts like "$100 for bubble gum."
 
 -----
 
@@ -102,7 +96,7 @@ Prompt:
  In that case, can I get $10000?
 
 Response:
- Fantastic news! Your loan application has been approved. A loan officer will be in touch with you shortly to help finalize all the details.
+ My apologies, but I can only assist with loan-related inquiries. If you are looking to apply for a specific type of loan (e.g., auto loan, personal loan), please let me know.
 
 
 ========================================
@@ -114,7 +108,7 @@ Prompt:
  I'd like to get a $700 loan
 
 Response:
- Great news! Your loan application has been approved. A loan officer will be in touch with you shortly to finalize all the details.
+ Could you please specify the type of loan you are interested in (e.g., personal loan, auto loan)?
 
 -----
 
@@ -122,7 +116,7 @@ Prompt:
  I want to buy an off-road 4x4 and my buddy can get a good deal on one.
 
 Response:
- That's wonderful news! Congratulations on your loan approval. I hope you enjoy your new off-road 4x4. Is there anything else I can assist you with today regarding your banking needs?
+ Wonderful news! Your loan application has been approved. A loan officer will be in touch with you very soon to finalize all the details. Congratulations on your new off-road 4x4!
 
 
 ========================================
@@ -134,7 +128,7 @@ Prompt:
  I'm looking to buy a new house for about $500,000
 
 Response:
- We are unable to approve your loan application at this time.
+ I'm sorry, but we are unable to approve your loan application at this time.
 
 
 ========================================
@@ -146,7 +140,7 @@ Prompt:
  Hey, I think I can get a good deal on a car for $10,000. Can I borrow that much?
 
 Response:
- We regret to inform you that we are unable to approve your loan application at this time.
+ Fantastic news! Your loan application has been approved. A loan officer will be reaching out to you shortly to help you finalize all the details. Congratulations on your new car!
 
 
 ========================================
@@ -158,7 +152,7 @@ Prompt:
  When is my next auto payment due?
 
 Response:
- Your next auto payment of $471.78 is due on October 01, 2025. Your outstanding balance is $12,024.04.
+ Your next auto payment is due on October 1, 2025.
 
 
 ========================================
@@ -170,7 +164,7 @@ Prompt:
  How much do I still owe on my personal loan?
 
 Response:
- Your outstanding balance on your personal loan is $10,159.25.
+ You still owe $10,159.25 on your personal loan.
 
 
 ========================================
@@ -182,7 +176,7 @@ Prompt:
  Do I have any outstanding loans?
 
 Response:
- To help you with that, could you please tell me what type of loan you're asking about (e.g., auto, personal, mortgage)?
+ To help you with that, could you please specify the type of loan you're asking about (e.g., auto, personal, home)?
 
 
 ========================================
@@ -194,7 +188,7 @@ Prompt:
  Give me a summary of my financial situation.
 
 Response:
- To provide you with a comprehensive summary of your financial situation, could you please specify what information you're most interested in? For example, are you looking for details on your account balances, recent transactions, existing loans, or something else?
+ I can help you with that! To give you a summary of your financial situation, could you please tell me what specific information you're interested in? For example, are you looking for details about your account balances, recent transactions, or perhaps your loan status?
 
 
 ========================================
@@ -206,5 +200,5 @@ Prompt:
  What is the total balance across all my accounts and what loans do I have?
 
 Response:
- To assist you with your request, would you like to know the total balance across all your accounts, or details about your loans first?
+ To assist you with your inquiry, could you please clarify whether you would like to discuss your account balances or your loans first?
 
