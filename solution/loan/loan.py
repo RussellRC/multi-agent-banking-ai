@@ -226,6 +226,11 @@ class TotalValueAgent(BaseAgent):
                         logging.error(f"Error parsing PolicyAgentOutput: {e}")
                         errors.append(f"Error parsing policy details: {e}")
 
+            # Clean up the injected event
+            if loan_type and loan_amount > 0 and policy_helper_event in ctx.session.events:
+                logging.debug("Removing policy helper event")
+                ctx.session.events.remove(policy_helper_event)
+
             # Calculate minimum deposit balance
             if policy_found and debt_to_equity_ratio > 0:
                 minimum_deposit_balance = (total_outstanding_balance + loan_amount) / debt_to_equity_ratio
@@ -294,13 +299,17 @@ check_equity_agent = Agent(
     sub_agents=[remote_deposit_agent],
     input_schema=CheckEquityInput,
     output_schema=CheckEquityOutput,
+    output_key="equity_check_output",
     generate_content_config=generate_content_config
 )
 
 # --- user_profile_agent ---
 
+class UserProfileInput(BaseModel):
+    customer_name: str = Field(description="The name of the customer.", default="Chris Scott")
+
 class UserProfileOutput(BaseModel):
-    customer_name: str = Field(description="The name of the customer.", default="")
+    customer_name: str = Field(description="The name of the customer.")
     customer_rating: str | None = Field(
         description="The determined rating of the customer, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.",
         default=None)
@@ -309,7 +318,6 @@ class UserProfileOutput(BaseModel):
     errors: List[str] = Field(
         description="List of errors that happened while determining the customer rating. Empty if no errors were found.",
         default_factory=list)
-
 
 user_profile_agent = LlmAgent(
     name="user_profile_agent",
@@ -320,7 +328,9 @@ user_profile_agent = LlmAgent(
         datastore_search_tool
     ],
     generate_content_config=generate_content_config,
-    output_schema=UserProfileOutput
+    input_schema=UserProfileInput,
+    output_schema=UserProfileOutput,
+    output_key="user_profile_output"
 )
 
 
@@ -358,9 +368,17 @@ def is_rating_sufficient(customer_rating: str | None, minimum_customer_rating: s
 
 # --- approval_report_agent ---
 class ApprovalDecisionInput(BaseModel):
-    minimum_customer_rating: str = Field(description="The minimum customer rating that the customer needs to qualify for a loan as per the loan policy, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.")
-    customer_rating: str = Field(description="The current rating of the customer determined by its profile summary from a loan officer, e.g., 'Excellent', 'Great', 'Good', 'Fair', 'Poor'.")
-    is_balance_sufficient: bool = Field(description="Whether the customer has sufficient equity to qualify for the loan.")
+    minimum_customer_rating: str = Field(
+        description="The minimum customer rating that the customer needs to qualify for a loan."
+    )
+    # Map directly to the output_key from user_profile_agent
+    user_profile_output: UserProfileOutput = Field(
+        description="The output from the user profile agent containing the customer rating."
+    )
+    # Map directly to the output_key from check_equity_agent
+    equity_check_output: CheckEquityOutput = Field(
+        description="The output from the equity check agent containing balance sufficiency."
+    )
 
 approval_report_agent = LlmAgent(
     name="approval_report_agent",

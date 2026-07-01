@@ -3,6 +3,7 @@ import os
 from google.adk.agents import Agent
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent, AGENT_CARD_WELL_KNOWN_PATH
 from google.adk.sessions import InMemorySessionService
+from google.genai import types
 
 # Configure short-term session to use the in-memory service
 session_service = InMemorySessionService()
@@ -47,4 +48,9 @@ root_agent = Agent(
   instruction=instruction,
   tools=tools,
   sub_agents=sub_agents,
+  generate_content_config=types.GenerateContentConfig(
+    http_options=types.HttpOptions(
+      retry_options=types.HttpRetryOptions(initial_delay=1, attempts=5),
+    )
+  )
 )

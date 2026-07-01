@@ -44,7 +44,7 @@ root_agent = Agent(
     tools=tools,
     generate_content_config=types.GenerateContentConfig(
         http_options=types.HttpOptions(
-            retry_options=types.HttpRetryOptions(initial_delay=1, attempts=3),
+            retry_options=types.HttpRetryOptions(initial_delay=1, attempts=5),
         )
     )
 )
