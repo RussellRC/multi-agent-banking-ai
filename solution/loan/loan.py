@@ -56,6 +56,7 @@ get_requested_value_agent = LlmAgent(
     instruction=load_instructions("loan-request-prompt.txt"),
     tools=[],
     output_schema=RequestedValueOutput,
+    output_key="requested_value_output",
     generate_content_config=generate_content_config
 )
 
@@ -76,6 +77,7 @@ outstanding_balance_agent = LlmAgent(
         db_client.load_tool("get_total_outstanding_balance")
     ],
     output_schema=OutstandingBalanceOutput,
+    output_key="outstanding_balance_output",
     generate_content_config=generate_content_config
 )
 
@@ -111,6 +113,7 @@ policy_agent = LlmAgent(
         datastore_search_tool
     ],
     output_schema=PolicyAgentOutput,
+    output_key="policy_output",
     generate_content_config=generate_content_config
 )
 
@@ -157,87 +160,72 @@ class TotalValueAgent(BaseAgent):
         )
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-        ctx.reset_sub_agent_states(self.name)
-
-        loan_amount = 0.0
-        loan_type = ""
         errors = []
+        loan_type = None
+        loan_amount = 0.0
+        total_outstanding_balance = 0.0
+        policy_found = False
+        debt_to_equity_ratio = 0.0
+        minimum_customer_rating = ""
+        minimum_deposit_balance = None
 
         # 1. Run get_requested_value_agent
         async for event in self.get_requested_value_agent.run_async(ctx):
             yield event
-            if event.is_final_response() and event.content and event.content.parts:
-                try:
-                    text = event.content.parts[0].text
-                    output = RequestedValueOutput.model_validate_json(text)
-                    loan_amount = output.loan_amount
-                    loan_type = output.loan_type
-                    if output.errors:
-                        errors.extend(output.errors)
-                except Exception as e:
-                    logging.error(f"Error parsing RequestedValueOutput: {e}")
-                    errors.append(f"Error parsing requested loan details: {e}")
 
-        # Initialize downstream variables with safe defaults
-        total_outstanding_balance = 0.0
-        debt_to_equity_ratio = 0.0
-        policy_found = False
-        minimum_customer_rating = ""
-        minimum_deposit_balance = 0.0
+        req_val_output = ctx.session.state.get("requested_value_output")
+        if req_val_output:
+            loan_type = req_val_output.get("loan_type")
+            loan_amount = req_val_output.get("loan_amount", 0.0)
+            if req_val_output.get("errors"):
+                errors.extend(req_val_output.get("errors"))
 
-        # FAST FAIL: Only proceed if Step 1 extracted the required details without errors
-        if not errors:
-            # 2. Run outstanding_balance_agent
-            async for event in self.outstanding_balance_agent.run_async(ctx):
-                yield event
-                if event.is_final_response() and event.content and event.content.parts:
-                    try:
-                        text = event.content.parts[0].text
-                        output = OutstandingBalanceOutput.model_validate_json(text)
-                        total_outstanding_balance = round(output.total_outstanding_balance, 2)
-                    except Exception as e:
-                        logging.error(f"Error parsing OutstandingBalanceOutput: {e}")
-                        errors.append(f"Error parsing outstanding loan balance: {e}")
+        # 2. Run outstanding_balance_agent
+        async for event in self.outstanding_balance_agent.run_async(ctx):
+            yield event
 
-            # 3. Run policy_agent
-            if loan_type and loan_amount > 0:
-                helper_text = f"Give me the policy for a loan with these details:\n - type: {loan_type}\n - amount: {loan_amount}"
-                policy_helper_event = Event(
-                    invocation_id=ctx.invocation_id,
-                    author="user",
-                    branch=ctx.branch,
-                    content=types.Content(parts=[types.Part(text=helper_text)])
-                )
-                ctx.session.events.append(policy_helper_event)
+        balance_output = ctx.session.state.get("outstanding_balance_output")
+        if balance_output:
+            total_outstanding_balance = balance_output.get("total_outstanding_balance", 0.0)
+            if balance_output.get("errors"):
+                errors.extend(balance_output.get("errors"))
 
-            async for event in self.policy_agent.run_async(ctx):
-                yield event
-                if event.is_final_response() and event.content and event.content.parts:
-                    try:
-                        text = event.content.parts[0].text
-                        output = PolicyAgentOutput.model_validate_json(text)
-                        if output.policy_found and output.policy:
-                            debt_to_equity_ratio = output.policy.debt_to_equity_ratio
-                            minimum_customer_rating = output.policy.minimum_customer_rating
-                            policy_found = True
-                        if output.errors:
-                            errors.extend(output.errors)
-                    except Exception as e:
-                        logging.error(f"Error parsing PolicyAgentOutput: {e}")
-                        errors.append(f"Error parsing policy details: {e}")
+        # 3. Run policy_agent
+        if loan_type and loan_amount > 0:
+            helper_text = f"Give me the policy for a loan with these details:\n - type: {loan_type}\n - amount: {loan_amount}"
+            policy_helper_event = Event(
+                invocation_id=ctx.invocation_id,
+                author="user",
+                branch=ctx.branch,
+                content=types.Content(parts=[types.Part(text=helper_text)])
+            )
+            ctx.session.events.append(policy_helper_event)
 
-            # Clean up the injected event
-            if loan_type and loan_amount > 0 and policy_helper_event in ctx.session.events:
-                logging.debug("Removing policy helper event")
-                ctx.session.events.remove(policy_helper_event)
+        async for event in self.policy_agent.run_async(ctx):
+            yield event
 
-            # Calculate minimum deposit balance
-            if policy_found and debt_to_equity_ratio > 0:
-                minimum_deposit_balance = (total_outstanding_balance + loan_amount) / debt_to_equity_ratio
-                minimum_deposit_balance = round(minimum_deposit_balance, 2)
-            else:
-                if not policy_found:
-                    errors.append("No policy was found to determine the debt-to-equity ratio.")
+        policy_output = ctx.session.state.get("policy_output")
+        if policy_output:
+            # Notice we use .get() for nested objects too!
+            if policy_output.get("policy_found") and policy_output.get("policy"):
+                policy_data = policy_output.get("policy")
+                debt_to_equity_ratio = policy_data.get("debt_to_equity_ratio", 0.0)
+                minimum_customer_rating = policy_data.get("minimum_customer_rating", "")
+                policy_found = True
+            if policy_output.get("errors"):
+                errors.extend(policy_output.get("errors"))
+
+        # Clean up the injected event as we discussed previously
+        if loan_type and loan_amount > 0 and policy_helper_event in ctx.session.events:
+            ctx.session.events.remove(policy_helper_event)
+
+        # Calculate minimum deposit balance
+        if policy_found and debt_to_equity_ratio > 0:
+            minimum_deposit_balance = (total_outstanding_balance + loan_amount) / debt_to_equity_ratio
+            minimum_deposit_balance = round(minimum_deposit_balance, 2)
+        else:
+            if not policy_found:
+                errors.append("No policy was found to determine the debt-to-equity ratio.")
 
         # Store in session state (safely writes defaults if we failed fast)
         ctx.session.state["loan_amount"] = loan_amount
