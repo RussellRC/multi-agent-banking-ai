@@ -121,6 +121,10 @@ Then connect a remote debugger on `localhost:5678`
 
 ## Testing with given scenarios
 ```shell
+# Clean up old memory
+find . -type d -name ".adk" -exec rm -rf {} +
+
+# Run the application
 source .venv/bin/activate
 cd testing
 python ./bin/a2a.py --in test_scenarios.csv --out test_results
